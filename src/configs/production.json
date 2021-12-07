@@ -1,0 +1,24 @@
+{
+    "env": "production",
+    "dbConfig": {
+        "host": "localhost",
+        "database": "mongoose",
+        "port": 27017
+    },
+    "secretKey": "secretKey",
+    "log": {
+        "format": "combined",
+        "dir": "../logs"
+    },
+    "cors": {
+        "origin": "your.domain.com",
+        "credentials": true
+    },
+    "blockchains": [
+        {
+            "name": "rinkeby",
+            "url": "https://mainnet.infura.io/v3/be7ae902b7c74e4fa489bc85729499dd",
+            "ERC721ContractAddress": "0x8d12A197cB00D4747a1fe03395095ce2A5CC6819"
+        }
+    ]
+}
