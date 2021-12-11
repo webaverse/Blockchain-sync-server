@@ -39,7 +39,7 @@ class ERC721Service {
       for (const event of events) {
         const tokenID = event.returnValues.tokenId;
         const to = event.returnValues.to.trim().toLowerCase();
-        await TokenOwnerModel.findOneAndUpdate({ tokenID }, { owner: to }, { upsert: true });
+        await TokenOwnerModel.findOneAndUpdate({ tokenID }, { owner: to, network: name }, { upsert: true });
       }
       await SyncConfigModel.findOneAndUpdate({ network: name, task: 'syncTokenIDOwners' }, { lastSyncedBlock: latestBlock }, { upsert: true });
     }
@@ -48,6 +48,7 @@ class ERC721Service {
   async storeMetadata(): Promise<any> {
     const networks = config.get('blockchains') as any[];
     for (let i = 0; i < networks.length; i++) {
+      console.log(networks[i].name);
       const { name, url, ERC721ContractAddress } = networks[i];
       const web3 = new Web3(url);
       const contract = new web3.eth.Contract(abi as any, ERC721ContractAddress);
@@ -70,7 +71,7 @@ class ERC721Service {
       }
 
       for (const event of events) {
-        const metadata = await this.fetchMetadata(event);
+        const metadata = await this.fetchMetadata(event, name);
         await MetadataModel.findOneAndReplace({ tokenID: metadata.tokenID }, metadata, {
           upsert: true,
         });
@@ -79,15 +80,15 @@ class ERC721Service {
     }
   }
 
-  async getTokenIDsByOwner(owner: string): Promise<String[]> {
-    return (await TokenOwnerModel.find({ owner })).map(tokenOwner => tokenOwner.tokenID);
+  async getTokenIDsByOwner(owner: string, network: string): Promise<String[]> {
+    return (await TokenOwnerModel.find({ owner, network })).map(tokenOwner => tokenOwner.tokenID);
   }
 
-  async getTokenMetadata(tokenID: string): Promise<IMetaData> {
-    return await MetadataModel.findOne({ tokenID });
+  async getTokenMetadata(tokenID: string, network: string): Promise<IMetaData> {
+    return await MetadataModel.findOne({ tokenID, network });
   }
 
-  private async fetchMetadata(event): Promise<IMetaData> {
+  private async fetchMetadata(event, network): Promise<IMetaData> {
     const tokenID = event.returnValues.id;
     const uri = event.returnValues.uri;
     try {
@@ -111,6 +112,7 @@ class ERC721Service {
       return {
         tokenID,
         uri,
+        network,
         ...dto,
       };
     } catch (error) {
@@ -118,6 +120,7 @@ class ERC721Service {
       return {
         tokenID,
         uri,
+        network,
       };
     }
   }

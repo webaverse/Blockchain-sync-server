@@ -28,4 +28,5 @@ export interface IMetaData {
   background_color?: string;
   animation_url?: string;
   youtube_url?: string;
+  network: string;
 }

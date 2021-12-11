@@ -16,9 +16,14 @@
     },
     "blockchains": [
         {
-            "name": "rinkeby",
-            "url": "https://mainnet.infura.io/v3/be7ae902b7c74e4fa489bc85729499dd",
-            "ERC721ContractAddress": "0x8d12A197cB00D4747a1fe03395095ce2A5CC6819"
+            "name": "matic-mainnet",
+            "url": "https://speedy-nodes-nyc.moralis.io/e3771a4194ca1a8d20c96277/polygon/mainnet",
+            "ERC721ContractAddress": "0xace9277df1ca282f6924a731389a5ca9bd91c204"
+        },
+        {
+            "name": "sidechain",
+            "url": "http://13.57.177.184:8545",
+            "ERC721ContractAddress": "0x818EA83e5747258b6Bc421C9b8C2147059f42FC8"
         }
     ]
 }

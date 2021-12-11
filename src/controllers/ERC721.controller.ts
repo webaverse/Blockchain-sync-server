@@ -6,13 +6,14 @@ class ERC721Controller {
 
   public index = async (req: Request, res: Response, next: NextFunction) => {
     const owner = `${req.query.owner}`.toLowerCase().trim();
+    const network = `${req.query.network}`.trim();
     try {
       if (!owner) {
         return res.sendStatus(400);
       }
-      const tokenIDs = await this.erc721Service.getTokenIDsByOwner(owner);
+      const tokenIDs = await this.erc721Service.getTokenIDsByOwner(owner, network);
       console.log(tokenIDs);
-      const metadata = await Promise.all(tokenIDs.map(async tokenID => this.erc721Service.getTokenMetadata(tokenID as string)));
+      const metadata = await Promise.all(tokenIDs.map(async tokenID => this.erc721Service.getTokenMetadata(tokenID as string, network)));
       res.json(metadata);
     } catch (error) {
       next(error);
