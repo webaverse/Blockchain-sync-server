@@ -9,6 +9,7 @@ import { validateOrReject } from 'class-validator';
 import SyncConfigModel from '@/models/sync-config.model';
 import TokenOwnerModel from '@/models/token-owner.model';
 import { ITokenOwner } from '@/interfaces/token-owner.interface';
+import isIPFS from 'is-ipfs';
 
 class ERC721Service {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -90,7 +91,14 @@ class ERC721Service {
 
   private async fetchMetadata(event, network): Promise<IMetaData> {
     const tokenID = event.returnValues.id;
-    const uri = event.returnValues.uri;
+
+    let uri = event.returnValues.uri;
+    if (isIPFS.cidPath(uri)) {
+      uri = 'https://ipfs.io/ipfs/' + uri;
+    } else if (isIPFS.path(uri) || isIPFS.cid(uri)) {
+      uri = 'https://ipfs.io' + uri;
+    }
+
     try {
       const res = await axios.get<IMetaDataRequest>(uri);
       const contentType = res.headers['content-type'];

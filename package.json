@@ -29,6 +29,7 @@
     "express": "^4.17.1",
     "helmet": "^4.6.0",
     "hpp": "^0.2.3",
+    "is-ipfs": "^6.0.2",
     "jest": "^27.0.6",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.1",
