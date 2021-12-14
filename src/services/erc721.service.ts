@@ -21,7 +21,12 @@ class ERC721Service {
       const web3 = new Web3(url);
       const contract = new web3.eth.Contract(abi as any, ERC721ContractAddress);
       const syncConfig = await SyncConfigModel.findOne({ network: name, task: 'syncTokenIDOwners' });
-      const lastSyncedBlock = syncConfig ? syncConfig.lastSyncedBlock : 0;
+
+      let lastSyncedBlock = networks[i].startingBlock;
+      if (syncConfig && syncConfig.lastSyncedBlock && syncConfig.lastSyncedBlock > networks[i].startingBlock) {
+        lastSyncedBlock = syncConfig.lastSyncedBlock;
+      }
+
       const latestBlock = await web3.eth.getBlockNumber();
       if (lastSyncedBlock === latestBlock) {
         continue;
@@ -34,7 +39,7 @@ class ERC721Service {
           toBlock: latestBlock,
         });
       } catch (error) {
-        console.log(error);
+        console.log(error.message);
         continue;
       }
       for (const event of events) {
@@ -54,7 +59,12 @@ class ERC721Service {
       const web3 = new Web3(url);
       const contract = new web3.eth.Contract(abi as any, ERC721ContractAddress);
       const syncConfig = await SyncConfigModel.findOne({ network: name, task: 'storeMetadata' });
-      const lastSyncedBlock = syncConfig ? syncConfig.lastSyncedBlock : 0;
+
+      let lastSyncedBlock = networks[i].startingBlock;
+      if (syncConfig && syncConfig.lastSyncedBlock && syncConfig.lastSyncedBlock > networks[i].startingBlock) {
+        lastSyncedBlock = syncConfig.lastSyncedBlock;
+      }
+
       const latestBlock = await web3.eth.getBlockNumber();
       if (lastSyncedBlock === latestBlock) {
         continue;
@@ -67,7 +77,7 @@ class ERC721Service {
           toBlock: latestBlock,
         });
       } catch (error) {
-        console.log(error);
+        console.log(error.message);
         continue;
       }
 
@@ -94,9 +104,9 @@ class ERC721Service {
 
     let uri = event.returnValues.uri;
     if (isIPFS.cidPath(uri)) {
-      uri = 'https://ipfs.io/ipfs/' + uri;
+      uri = 'https://gateway.pinata.cloud/ipfs/' + uri;
     } else if (isIPFS.path(uri) || isIPFS.cid(uri)) {
-      uri = 'https://ipfs.io' + uri;
+      uri = 'https://gateway.pinata.cloud' + uri;
     }
 
     try {
@@ -124,7 +134,7 @@ class ERC721Service {
         ...dto,
       };
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
       return {
         tokenID,
         uri,
