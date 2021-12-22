@@ -107,7 +107,7 @@ class ERC721Service {
 
     let uri = event.returnValues.uri;
     if (isIPFS.cidPath(uri) || isIPFS.path(uri) || isIPFS.cid(uri)) {
-      uri = 'https://gateway.pinata.cloud/ipfs/' + uri;
+      uri = 'https://ipfs.webaverse.com/ipfs/' + uri;
     }
     let res: AxiosResponse<IMetaDataRequest>;
     try {
