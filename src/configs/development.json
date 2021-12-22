@@ -16,15 +16,9 @@
     },
     "blockchains": [
         {
-            "name": "matic-mainnet",
-            "url": "https://rpc-mainnet.maticvigil.com/v1/1bdde9289621d9d420488a9804254f4a958e128b",
-            "ERC721ContractAddress": "0xace9277df1ca282f6924a731389a5ca9bd91c204",
-            "startingBlock": 22323640
-        },
-        {
             "name": "sidechain",
             "url": "http://13.57.177.184:8545",
-            "ERC721ContractAddress": "0x818EA83e5747258b6Bc421C9b8C2147059f42FC8",
+            "ERC721ContractAddress": "0xCf5909f2eac709151fFA95459fB14C5E0Ecf0849",
             "startingBlock": 0
         }
     ]

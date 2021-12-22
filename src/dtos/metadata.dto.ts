@@ -53,4 +53,16 @@ export class FetchMetaDataDto {
     message: 'Youtube url is not valid',
   })
   public youtube_url: string;
+
+  @IsOptional()
+  @IsString({
+    message: 'Hash is not valid',
+  })
+  public hash: string;
+
+  @IsOptional()
+  @IsString({
+    message: 'Ext is not valid',
+  })
+  public ext: string;
 }

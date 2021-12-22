@@ -33,6 +33,8 @@ const metadataSchema: Schema = new Schema({
   animation_url: String,
   youtube_url: String,
   network: String,
+  hash: String,
+  ext: String,
 });
 
 const MetadataModel = model<IMetaData & Document>('Metadata', metadataSchema);

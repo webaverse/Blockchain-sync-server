@@ -12,7 +12,9 @@ class ERC721Route implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.erc721Controller.index);
+    this.router.get(`${this.path}`, this.erc721Controller.getTokensByOwner);
+    this.router.get(`${this.path}/all`, this.erc721Controller.getAllTokens);
+    this.router.get(`${this.path}/:tokenID`, this.erc721Controller.getTokenMetadata);
   }
 }
 

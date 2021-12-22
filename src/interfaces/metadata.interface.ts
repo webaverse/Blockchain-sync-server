@@ -14,6 +14,8 @@ export interface IMetaDataRequest {
   background_color?: string;
   animation_url?: string;
   youtube_url?: string;
+  hash?: string;
+  ext?: string;
 }
 
 export interface IMetaData {
@@ -29,4 +31,7 @@ export interface IMetaData {
   animation_url?: string;
   youtube_url?: string;
   network: string;
+  hash?: string;
+  ext?: string;
+  owner?: string;
 }
