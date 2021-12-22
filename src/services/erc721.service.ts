@@ -166,7 +166,7 @@ class ERC721Service {
 
   public getTokensInIdRange = async (startRange: Number, endRange: Number, network: string) => {
     const ids = [];
-    for (let i = startRange; i <= endRange; i++) {
+    for (let i: any = startRange; i <= endRange; i++) {
       ids.push(`${i}`);
     }
     const tokens = await MetadataModel.find({ tokenID: { $in: ids }, network })
