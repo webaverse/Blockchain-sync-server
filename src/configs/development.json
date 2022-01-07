@@ -19,6 +19,7 @@
             "name": "sidechain",
             "url": "http://13.57.177.184:8545",
             "ERC721ContractAddress": "0xCf5909f2eac709151fFA95459fB14C5E0Ecf0849",
+            "AccountsContractAddress": "0xEE64CB0278f92a4A20cb8F2712027E89DE0eB85e",
             "startingBlock": 0
         }
     ]
