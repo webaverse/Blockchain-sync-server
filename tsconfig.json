@@ -33,7 +33,8 @@
       "@services/*": ["services/*"],
       "@utils/*": ["utils/*"],
       "@abi/*": ["abi/*"],
-      "@jobs/*": ["jobs/*"]
+      "@jobs/*": ["jobs/*"],
+      "@config/*": ["config/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.json", ".env"],

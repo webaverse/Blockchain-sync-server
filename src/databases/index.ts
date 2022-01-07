@@ -1,7 +1,7 @@
-import config from 'config';
+import config from '@config/index';
 import { dbConfig } from '@interfaces/db.interface';
 
-const { host, port, database }: dbConfig = config.get('dbConfig');
+const { host, port, database }: dbConfig = config.dbConfig;
 
 export const dbConnection = {
   url: `mongodb://${host}:${port}/${database}`,

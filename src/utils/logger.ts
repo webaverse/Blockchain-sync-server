@@ -1,11 +1,11 @@
-import config from 'config';
+import config from '@config/index';
 import fs from 'fs';
 import path from 'path';
 import winston from 'winston';
 import winstonDaily from 'winston-daily-rotate-file';
 
 // logs dir
-const logDir: string = path.join(__dirname, config.get('log.dir'));
+const logDir: string = path.join(__dirname, config.log.dir);
 
 if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir);
