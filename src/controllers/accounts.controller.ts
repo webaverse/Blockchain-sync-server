@@ -13,7 +13,7 @@ class AccountsController {
         message: 'Invalid address',
       });
     }
-    const accountData = await this.accountService.getAccountData(address);
+    const accountData = await this.accountService.getAccountData(address.toLowerCase());
     try {
       res.json(accountData);
     } catch (error) {

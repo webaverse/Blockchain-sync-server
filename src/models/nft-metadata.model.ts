@@ -1,5 +1,5 @@
+import { INFTMetaData } from '@/interfaces/nft.interface';
 import { model, Schema, Document } from 'mongoose';
-import { IMetaData } from '@interfaces/metadata.interface';
 
 const metadataSchema: Schema = new Schema({
   tokenID: {
@@ -7,9 +7,17 @@ const metadataSchema: Schema = new Schema({
     required: true,
     unique: true,
   },
-  uri: {
+  network: {
+    type: String,
+    enum: ['polygon', 'sidechain'],
+    required: true,
+  },
+  contractAddress: {
     type: String,
     required: true,
+  },
+  uri: {
+    type: String,
   },
   image: String,
   image_data: String,
@@ -20,11 +28,9 @@ const metadataSchema: Schema = new Schema({
     {
       trait_type: {
         type: String,
-        required: true,
       },
       value: {
         type: String,
-        required: true,
       },
       display_type: String,
     },
@@ -32,11 +38,10 @@ const metadataSchema: Schema = new Schema({
   background_color: String,
   animation_url: String,
   youtube_url: String,
-  network: String,
   hash: String,
   ext: String,
 });
 
-const MetadataModel = model<IMetaData & Document>('Metadata', metadataSchema);
+const NFTMetadataModel = model<INFTMetaData & Document>('NFTMetadata', metadataSchema);
 
-export default MetadataModel;
+export default NFTMetadataModel;

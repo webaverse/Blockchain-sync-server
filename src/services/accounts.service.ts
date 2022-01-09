@@ -30,13 +30,13 @@ class AccountsService {
     if (lastSyncedBlock >= latestBlock) return;
 
     const metaDataEvents = await contract.getPastEvents('MetadataSet', {
-      fromBlock: lastSyncedBlock,
+      fromBlock: lastSyncedBlock + 1,
       toBlock: latestBlock,
     });
     const eventsReturnValues: IAccountsValue[] = metaDataEvents.map(event => {
       return {
         key: event.returnValues.key,
-        owner: event.returnValues.owner,
+        owner: event.returnValues.owner.toLowerCase(),
         value: event.returnValues.value,
       };
     });

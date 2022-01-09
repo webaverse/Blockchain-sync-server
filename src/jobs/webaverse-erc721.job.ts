@@ -1,8 +1,7 @@
-import ERC721Service from '@/services/erc721.service';
+import WebaverseERC721Service from '@/services/webaverse-erc721.service';
 import cron from 'node-cron';
-import config from 'config';
 
-export class ERC721Job {
+export class WebaverseERC721Job {
   private isMetaDataSyncing = false;
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor() {}
@@ -17,15 +16,12 @@ export class ERC721Job {
       return;
     }
     this.isMetaDataSyncing = true;
-    const startingTime = new Date();
     try {
-      const erc721Service = new ERC721Service();
-      await erc721Service.storeMetadata();
-      await erc721Service.syncTokenIDOwners();
+      const erc721Service = new WebaverseERC721Service();
+      await erc721Service.syncData();
     } catch (error) {
       console.log(error);
     }
-    console.log(`Metadata sync completed in ${new Date().getTime() - startingTime.getTime()} ms`);
     this.isMetaDataSyncing = false;
   }
 }
