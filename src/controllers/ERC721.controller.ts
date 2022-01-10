@@ -75,6 +75,7 @@ class ERC721Controller {
     let owner: any = await this.accountsService.getAccountData(ownerAddress);
     if (!owner) {
       owner = {
+        address: ownerAddress,
         avatarName: '',
         avatarId: '',
         avatarExt: '',
@@ -94,11 +95,13 @@ class ERC721Controller {
         mainnetAddress: owner.mainnetAddress || '',
         addressProofs: '[]',
         loadout: '',
+        address: ownerAddress,
       };
     }
     let minter = await this.accountsService.getAccountData(minterAddress);
     if (!minter) {
       minter = {
+        address: minterAddress,
         avatarName: '',
         avatarId: '',
         avatarExt: '',
@@ -118,6 +121,7 @@ class ERC721Controller {
         mainnetAddress: owner.mainnetAddress || '',
         addressProofs: '[]',
         loadout: '',
+        address: minterAddress,
       };
     }
     return {
