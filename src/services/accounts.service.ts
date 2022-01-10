@@ -21,6 +21,21 @@ class AccountsService {
     return data;
   }
 
+  async getAllAccounts() {
+    const accountsObj = {};
+    const dataKeyValues: IAccountsValue[] = await AccountsModel.find().lean().exec();
+    for (const dataKeyValue of dataKeyValues) {
+      const { owner, key, value } = dataKeyValue;
+      if (!accountsObj[owner]) {
+        accountsObj[owner] = {
+          address: owner,
+        };
+      }
+      accountsObj[owner][key] = value;
+    }
+    return Object.values(accountsObj);
+  }
+
   async syncAccounts() {
     const web3 = new Web3(config.blockchain.sidechain.url);
     const contract = new web3.eth.Contract(abi as any, config.blockchain.sidechain.AccountsContract.address);

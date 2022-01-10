@@ -12,7 +12,8 @@ class AccountsRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}/:address`, this.accountsController.getAccountData);
+    this.router.get(`${this.path}/:address`, this.accountsController.getAccountAgainstAddress);
+    this.router.get(`${this.path}/`, this.accountsController.getAllAccounts);
   }
 }
 

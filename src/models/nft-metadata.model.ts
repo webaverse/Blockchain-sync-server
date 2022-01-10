@@ -35,6 +35,8 @@ const metadataSchema: Schema = new Schema({
       display_type: String,
     },
   ],
+  owner: String,
+  minter: String,
   background_color: String,
   animation_url: String,
   youtube_url: String,

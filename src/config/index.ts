@@ -19,7 +19,7 @@ export default {
     sidechain: {
       url: 'http://13.57.177.184:8545',
       ERC721Contract: {
-        address: '0x1E9dC2903cF07A047eBDdb28B14174eA3A86A775',
+        address: '0xb6fb5ECe738b8A79AD8A28Bd8f5f7581E348852f',
         startingBlock: 0,
       },
       AccountsContract: {

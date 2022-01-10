@@ -14,13 +14,14 @@ export interface INFTMetaDataRequest {
   background_color?: string;
   animation_url?: string;
   youtube_url?: string;
+  owner?: string;
+  minter?: string;
   hash?: string;
   ext?: string;
 }
 
 export interface INFTMetaData extends INFTMetaDataRequest {
   tokenID: string;
-  uri: string;
   network: string;
   contractAddress: string;
 }
