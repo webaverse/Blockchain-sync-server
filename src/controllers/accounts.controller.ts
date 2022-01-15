@@ -17,7 +17,7 @@ class AccountsController {
     const account: IAccount = (await this.accountService.getAccountData(address.toLowerCase())) as IAccount;
     try {
       res.json({
-        address: account.address || '',
+        address: address.toLowerCase(),
         name: account.name || '',
         avatarName: account.avatarName || '',
         avatarId: account.avatarId || '',
