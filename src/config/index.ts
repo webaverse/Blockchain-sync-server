@@ -3,9 +3,9 @@ import 'dotenv/config';
 export default {
   env: process.env.NODE_ENV,
   dbConfig: {
-    host: 'localhost',
-    database: 'blockchain-sync-server',
-    port: 27017,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT,
   },
   log: {
     format: 'combined',
@@ -17,9 +17,9 @@ export default {
   },
   blockchain: {
     sidechain: {
-      url: 'http://13.57.177.184:8545',
+      url: process.env.SIDECHAIN_URL,
       ERC721Contract: {
-        address: '0xb6fb5ECe738b8A79AD8A28Bd8f5f7581E348852f',
+        address: '0x1EB475A4510536cb26d3AF9e545436ae18ef1Ad6',
         startingBlock: 0,
       },
       AccountsContract: {
