@@ -5,7 +5,7 @@ export default {
   dbConfig: {
     host: process.env.DB_HOST,
     database: process.env.DB_NAME,
-    port: process.env.DB_PORT,
+    port: Number.parseInt(process.env.DB_PORT),
   },
   log: {
     format: 'combined',
