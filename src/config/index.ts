@@ -15,6 +15,10 @@ export default {
     origin: true,
     credentials: true,
   },
+  moralis: {
+    url: 'https://deep-index.moralis.io/api/v2',
+    apiKey: process.env.MORALIS_WEB3_API_KEY,
+  },
   blockchain: {
     sidechain: {
       url: process.env.SIDECHAIN_URL,

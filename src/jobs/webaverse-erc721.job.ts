@@ -1,4 +1,4 @@
-import WebaverseERC721Service from '@/services/webaverse-erc721.service';
+import WebaverseERC721Service from '@/services/nft.service';
 import cron from 'node-cron';
 
 export class WebaverseERC721Job {
