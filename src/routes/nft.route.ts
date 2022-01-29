@@ -13,6 +13,7 @@ class NFTRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, this.nftController.getTokensByOwner);
+    this.router.get(`${this.path}/metadata/*`, this.nftController.getTokenMetaData);
     this.router.get(`${this.path}/:contractAddress/:tokenID`, this.nftController.getTokensByContractAddress);
   }
 }

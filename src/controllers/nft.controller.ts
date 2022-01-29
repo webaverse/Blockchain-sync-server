@@ -1,11 +1,11 @@
-import NFTService from '@/services/nft.service';
 import MoralisService from '@/services/moralis.service';
 import AccountsService from '@/services/accounts.service';
 import { NextFunction, Request, Response } from 'express';
 import Web3 from 'web3';
+import isIPFS from 'is-ipfs';
+import fetch from 'node-fetch';
 
 class NFTController {
-  private nftService: NFTService = new NFTService();
   private moralisService: MoralisService = new MoralisService();
   private accountsService: AccountsService = new AccountsService();
 
@@ -50,6 +50,82 @@ class NFTController {
       tokenID,
       chainName,
     });
+  };
+
+  getTokenMetaData = async (req: Request, res: Response) => {
+    const { attributes: attrStr } = req.query;
+    let attributes;
+    try {
+      attributes = JSON.parse(attrStr as string);
+      if (!attributes) {
+        attributes = [];
+      }
+    } catch (error) {
+      attributes = [];
+    }
+
+    let extension = `${req.params[0]}`.split('.').pop();
+    let file = `${req.params[0]}`.split('.').slice(0, -1).join('.');
+
+    if (extension && !file) {
+      file = extension;
+      extension = '';
+    } else {
+      extension = extension.toLowerCase();
+    }
+
+    const metadata = {
+      name: undefined,
+      description: undefined,
+      background_color: undefined,
+      youtube_url: undefined,
+      external_url: undefined,
+      asset: undefined,
+      animation_url: undefined,
+      image: undefined,
+    };
+
+    metadata.name = file.split('/').pop();
+
+    // if the file is not a complete url, we need to complete it
+    if (file.startsWith('http')) {
+      file = file + '.' + extension;
+    } else if (isIPFS.ipfsPath(file)) {
+      file = 'https://ipfs.webaverse.com' + file;
+    } else if (isIPFS.cid(file)) {
+      file = 'https://ipfs.webaverse.com/ipfs/' + file;
+    } else if (isIPFS.cidPath(file)) {
+      file = 'https://ipfs.webaverse.com/ipfs/' + file + '.' + extension;
+    } else if (file.startsWith('ipfs://')) {
+      file = file.replace('ipfs://', 'https://ipfs.webaverse.com/ipfs/');
+    }
+
+    if (['jpg', 'jpeg', 'png', 'gif', 'svg'].includes(extension)) {
+      metadata.image = file;
+    } else if (['vrm', 'vox', 'js', 'scn', 'html', 'glb'].includes(extension)) {
+      metadata.animation_url = file;
+      metadata.asset = file;
+    } else if (['mp4', 'webm', 'ogg', 'html'].includes(extension)) {
+      metadata.animation_url = file;
+    } else if (extension === 'metaversefile') {
+      metadata.asset = file + '/.metaversefile';
+
+      try {
+        const metaversefile = await fetch(metadata.asset).then(res => res.json());
+        metadata.name = metaversefile.name || metadata.name;
+        metadata.description = metaversefile.description;
+        metadata.background_color = metaversefile.background_color;
+        metadata.youtube_url = metaversefile.youtube_url;
+        metadata.external_url = metaversefile.external_url;
+      } catch (error) {
+        console.log(error.message);
+      }
+    } else {
+      metadata.image = file;
+      metadata.asset = file;
+    }
+
+    res.json(metadata);
   };
 }
 
