@@ -1,4 +1,4 @@
-interface IMoralisNFTResult {
+export interface IMoralisNFTResult {
   token_address: string;
   token_id: string;
   block_number_minted: string;

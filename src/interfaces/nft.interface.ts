@@ -1,24 +1,19 @@
 interface INFTAssetContract {
   address: string;
+  asset_contract_type: string;
+  created_date: string;
   name: string;
+  schema_name: string;
   symbol: string;
-  image_url: string;
   description: string;
   external_link: string;
+  image_url: string;
 }
 
 interface INFTMetaDataTraits {
   trait_type: string;
   value: string;
   display_type?: string;
-}
-
-interface INFTAccount {
-  address: string;
-  user: {
-    username: string;
-  };
-  config: string;
 }
 
 export interface INFTMetadata {
@@ -31,20 +26,12 @@ export interface INFTMetadata {
   background_color?: string;
   animation_url?: string;
   youtube_url?: string;
-  owner?: string;
-  minter?: string;
-  hash?: string;
-  ext?: string;
+  asset?: string;
 }
 
 export interface INFT {
   token_id: string;
-  image_url: string;
-  background_color: string;
-  name: string;
-  external_link: string;
+  metadata: INFTMetadata;
+  balance: string;
   asset_contract: INFTAssetContract;
-  owner: INFTAccount;
-  traits: INFTMetaDataTraits[];
-  last_sale: string;
 }

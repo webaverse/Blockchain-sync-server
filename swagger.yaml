@@ -1,34 +1,243 @@
+swagger: "2.0"
+info:
+  description: "Blockchain sync server apis for fetching data from Webaverse contracts and any NFT contract on polygon, ethereum and sidechain."
+  version: "1.0.0"
+  title: "Webaverse Blockchain Sync Server API"
+host: "blockchain-sync.webaverse.com"
+basePath: "/"
+
 tags:
-- name: Owner Tokens
-  description: API to fetch the tokens of owner
-
-paths:
-# [GET] users
-  /:
-    get:
-      tags:
-      - erc721
-      summary: Get token ids along with the metadata uri link and metadata for all the tokens 
-      parameters:
-      - name: owner
-        in: query
-        description: user's ethereum wallet address
-        required: true
-        schema:
-          $ref: '#/definitions/owner'
-      responses:
-        200:
-          description: 'OK'
-        400:
-          description: 'Invalid request'
-        500:
-          description: 'Server Error'
-
-# definitions
-definitions:
-  owner:
-    type: string
-    description: Owner's ethereum wallet address
+- name: "account"
+  description: "API to fetch data from Webaverse Accounts contract deployed on sidechain. This contract is a key value store for webaverse users and can store any key value data."
+- name: "nft"
+  description: "API to fetch nft data from polygon, ethereum and sidechain."
 
 schemes:
- - http
+- "http"
+- "https"
+
+paths:
+  /account:
+    get:
+      tags:
+      - "account"
+      summary: "Fetch all webaverse accounts"
+      description: "Fetches all webaverse accounts metadata from the contract."
+      operationId: "fetchAllAccounts"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Success"
+        "500":
+          description: "Server Error"
+  /account/{address}:
+    get:
+      tags:
+      - "account"
+      summary: "Fetch all webaverse accounts"
+      description: "Fetches all webaverse accounts metadata from the contract."
+      operationId: "fetchAllWebaverseAccounts"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"      
+      parameters:
+      - in: "path"
+        name: "address"
+        description: "Valid ethereum compatible address"
+        type: "string"
+        required: true
+      responses:
+        "200":
+          description: "Success"
+        "400":
+          description: "Invalid Address"
+        "500":
+          description: "Server Error"
+
+  /nft:
+    get:
+      tags:
+      - "nft"
+      summary: "Fetch all NFTs for address"
+      description: "Fetches all NFTs owned by a valid address on provided chain."
+      operationId: "fetchNFTsByAddress"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"      
+      parameters:
+      - in: "query"
+        name: "chainName"
+        description: "Valid chain name. Valid values: eth, polygon, sidechain"
+        type: "string"
+        enum: ["eth", "polygon", "sidechain"]
+        required: true
+      - in: "query"
+        name: "owner"
+        description: "Valid ethereum compatible address"
+        type: "string"
+        required: true
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: array
+            items:
+                $ref: "#/definitions/NFT"
+        "400":
+          description: "Invalid Parameters"
+        "500":
+          description: "Server Error"
+
+
+  /nft/{contractAddress}/{tokenID}:
+    get:
+      tags:
+      - "nft"
+      summary: "Fetch single nft"
+      description: "Fetch nft data for a specific token id from a given contract address deployed on supported chain."
+      operationId: "getToken"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"      
+      parameters:
+      - in: "query"
+        name: "chainName"
+        description: "Valid chain name. Valid values: eth, polygon, sidechain"
+        type: "string"
+        enum: ["eth", "polygon", "sidechain"]
+        required: true
+      - in: "path"
+        name: "contractAddress"
+        description: "Valid ethereum compatible address"
+        type: "string"
+        required: true
+      - in: "path"
+        name: "tokenID"
+        description: "Token Id inside the contract"
+        type: "string"
+        required: true
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            $ref: "#/definitions/NFT"
+        "400":
+          description: "Invalid Parameters"
+        "500":
+          description: "Server Error"
+
+
+  /nft/metadata/{nftLink}:
+    get:
+      tags:
+      - "nft"
+      summary: "Generate metadata for NFT"
+      description: "This api generates Opensea compatible metadata for Webaverse NFTs. Every NFT minted on Webaverse contract has a URI link of format [sync-server-url]/nft/metadata/[cid or http link or cid path].[extension]. This gets parsed and a metadata object is returned."
+      operationId: "generateMetadata"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"      
+      parameters:
+      - in: "path"
+        name: "nftLink"
+        description: "Opensea metadata standard compatible attributes"
+        required: true
+        type: string
+
+      - in: "query"
+        name: "attributes"
+        description: "It should be an array with objects having trait_type and value"
+        required: false
+        type: string
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: array
+            items:
+                $ref: "#/definitions/NFTMetadata"
+        "404":
+          description: "Not Found"
+        "500":
+          description: "Server Error"
+
+definitions:
+  Attributes:
+    description: "Opensea standard for attributes in metadata"
+    type: "array"
+    items:
+      type: "object"
+      properties:
+        trait_type:
+          type: "string"
+          description: "Title of trait"
+        value:
+          type: "string"
+          description: "Value of trait"
+
+
+  NFTMetadata:
+    description: "Metadata object for nft. Expecting each contract to follow opensea guidelines. For webaverse NFTs we also generate 'asset' attribute which stores the link to .metaversefile, vrm, gltf or glb file"
+    type: "object"
+    properties:
+      image:
+        type: string
+      image_data:
+        type: string
+      external_url:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      attributes:
+        $ref: "#/definitions/Attributes"
+      background_color:
+        type: string
+      animation_url:
+        type: string
+      youtube_url:
+        type: string
+      asset:
+        type: string
+  NFT:
+    description: "NFT response object. It is inspired by opensea api but it is different."
+    type: "object"
+    properties:
+      token_id:
+        type: "string"
+        description: "Token ID pointing to the NFT"
+      metadata:
+        $ref: "#/definitions/NFTMetadata"
+      asset_contract:
+        type: "object"
+        description: "Details about the parent contract of the token ID"
+        properties:
+          address:
+            type: string
+          asset_contract_type:
+            type: string
+          created_date:
+            type: string
+          name:
+            type: string
+          schema_name:
+            type: string
+          symbol:
+            type: string
+          image_url:
+            type: string
+          description:
+            type: string
+          external_link:
+            type: string
+externalDocs:
+  description: "Find out more about Webaverse"
+  url: "https://webaverse.com"

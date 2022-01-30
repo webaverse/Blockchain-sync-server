@@ -4,10 +4,12 @@ import { NextFunction, Request, Response } from 'express';
 import Web3 from 'web3';
 import isIPFS from 'is-ipfs';
 import fetch from 'node-fetch';
+import SidechainNFTService from '@/services/sidechain-nft.service';
 
 class NFTController {
   private moralisService: MoralisService = new MoralisService();
   private accountsService: AccountsService = new AccountsService();
+  private sidechainNFTService: SidechainNFTService = new SidechainNFTService();
 
   public getTokensByOwner = async (req: Request, res: Response, next: NextFunction) => {
     const owner = `${req.query.owner}`.toLowerCase().trim();
@@ -23,14 +25,21 @@ class NFTController {
           message: 'Invalid owner address. owner expected in query params. Valid values: 0x...',
         });
       }
-      const tokens = await this.moralisService.getTokensByOwner(chainName, owner);
-      res.json(tokens);
+      if (chainName === 'eth' || chainName === 'polygon') {
+        // Get the data from Moralis
+        const tokens = await this.moralisService.getTokensByOwner(chainName, owner);
+        res.json(tokens);
+      } else {
+        // It's the sidechain request so get the data from database
+        const tokens = await this.sidechainNFTService.getTokensOfOwner(owner);
+        res.json(tokens);
+      }
     } catch (error) {
       next(error);
     }
   };
 
-  getTokensByContractAddress = async (req: Request, res: Response) => {
+  getToken = async (req: Request, res: Response) => {
     const contractAddress = `${req.params.contractAddress}`.toLowerCase().trim();
     const tokenID = `${req.params.tokenID}`.trim();
     const chainName = `${req.query.chainName}`.trim();
@@ -45,11 +54,15 @@ class NFTController {
       });
     }
 
-    res.json({
-      contractAddress,
-      tokenID,
-      chainName,
-    });
+    if (chainName === 'eth' || chainName === 'polygon') {
+      // Get the data from Moralis
+      const token = await this.moralisService.getToken(chainName, contractAddress, tokenID);
+      res.json(token);
+    } else {
+      // It's the sidechain request so get the data from database
+      const token = await this.sidechainNFTService.getToken(tokenID);
+      res.json(token);
+    }
   };
 
   getTokenMetaData = async (req: Request, res: Response) => {
@@ -83,6 +96,7 @@ class NFTController {
       asset: undefined,
       animation_url: undefined,
       image: undefined,
+      attributes,
     };
 
     metadata.name = file.split('/').pop();

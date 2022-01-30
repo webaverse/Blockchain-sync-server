@@ -9,6 +9,8 @@ const accountsSchema: Schema = new Schema({
   owner: {
     type: String,
     required: true,
+    lowercase: true,
+    trim: true,
   },
   value: {
     type: String,

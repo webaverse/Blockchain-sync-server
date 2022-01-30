@@ -76,9 +76,10 @@ class App {
     const options = {
       swaggerDefinition: {
         info: {
-          title: 'REST API',
+          title: 'Webaverse Blockchain Sync Server API',
           version: '1.0.0',
-          description: 'Example docs',
+          description:
+            'Blockchain sync server apis for fetching data from Webaverse contracts and any NFT contract on polygon, ethereum and sidechain.',
         },
       },
       apis: ['swagger.yaml'],

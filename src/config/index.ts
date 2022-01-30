@@ -1,6 +1,7 @@
 import 'dotenv/config';
 
 export default {
+  port: process.env.PORT || 3000,
   env: process.env.NODE_ENV,
   dbConfig: {
     host: process.env.DB_HOST,
@@ -22,8 +23,8 @@ export default {
   blockchain: {
     sidechain: {
       url: process.env.SIDECHAIN_URL,
-      ERC721Contract: {
-        address: '0x1EB475A4510536cb26d3AF9e545436ae18ef1Ad6',
+      ERC1155Contract: {
+        address: '0x06bd28FBc5181dc24D2cD00d64FC12291626c2a2',
         startingBlock: 0,
       },
       AccountsContract: {
