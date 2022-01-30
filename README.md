@@ -1,5 +1,9 @@
 # Blockchain Sync Server
-This is a server that syncs blockchain data from a remote node. It syncs the data from Webaverse's ERC721 smart contract and stores it in a database for faster access.
+This server syncs blockchain data from Webaverse's smart contracts and stores it in a database for faster access. Also it allows fetching any user NFTs from polygon, ethereum and sidechain.
+
+## Requirements
+- Node.js 16.x
+- MongoDB
 
 ## Installation
 
