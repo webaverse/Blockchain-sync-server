@@ -1,6 +1,8 @@
 # Blockchain Sync Server
 This server syncs blockchain data from Webaverse's smart contracts and stores it in a database for faster access. Also it allows fetching any user NFTs from polygon, ethereum and sidechain.
 
+[View API Docs](https://nft.webaverse.com/api-docs/)
+
 ## Requirements
 - Node.js 16.x
 - MongoDB
