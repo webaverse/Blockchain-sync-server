@@ -125,7 +125,12 @@ class NFTController {
       metadata.asset = file + '/.metaversefile';
 
       try {
-        const metaversefile = await fetch(metadata.asset).then(res => res.json());
+        const AbortController = globalThis.AbortController;
+        const controller = new AbortController();
+        setTimeout(() => {
+          controller.abort();
+        }, 15000);
+        const metaversefile = await fetch(metadata.asset, { signal: controller.signal }).then(res => res.json());
         metadata.name = metaversefile.name || metadata.name;
         metadata.description = metaversefile.description;
         metadata.background_color = metaversefile.background_color;
